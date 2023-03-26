@@ -22,9 +22,14 @@ public class usoPartido {
         
         partidoId = subcadenas[0].trim(); // .trim() elimina espacios en blanco
         equipo1 = subcadenas[1].trim();
+        goles1 = subcadenas[2].trim();
+        equipo2 = subcadenas[3].trim();
+        goles2 = subcadenas[4].trim();
         
-        System.out.println(partidoId + equipo1);
+        System.out.println(partidoId + " " +equipo1+" "+goles1+" "+equipo2+ " "+ goles2 );
+        
         System.out.println(Partido);
+        
       }
       archivoResultado.close();
     } catch (FileNotFoundException e) {
