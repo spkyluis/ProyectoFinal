@@ -2,9 +2,12 @@ package ProyectoFinal;
 import java.io.File;  // Import the File class
 import java.io.FileNotFoundException;  // Import this class to handle errors
 import java.util.Scanner; // Import the Scanner class to read text files
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class usoPartido {
-  public static void main(String[] args) {
+  public static void main(String[] args) throws IOException {
     try {
     	// variables para obtener los datos
     	String partidoId;
@@ -13,6 +16,15 @@ public class usoPartido {
     	String equipo2;
     	String goles2;
     
+    	 int cuantasLineas = 0;
+         BufferedReader reader = new BufferedReader(new FileReader("resultadosMod.csv"));
+         while (reader.readLine() != null) {   //va contando las líneas
+             cuantasLineas++;
+         }
+         cuantasLineas--;   // sacamos el encabezado
+         reader.close();
+    	
+    	
       File resultado = new File("resultadosMod.csv");
       Scanner archivoResultado = new Scanner(resultado);
       while (archivoResultado.hasNextLine()) {
@@ -26,9 +38,13 @@ public class usoPartido {
         equipo2 = subcadenas[3].trim();
         goles2 = subcadenas[4].trim();
         
+        
+        
         System.out.println(partidoId + " " +equipo1+" "+goles1+" "+equipo2+ " "+ goles2 );
         
         System.out.println(Partido);
+        
+        System.out.println("El archivo tiene "+ cuantasLineas+" partidos");
         
       }
       archivoResultado.close();
