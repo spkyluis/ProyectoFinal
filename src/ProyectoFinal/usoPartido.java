@@ -80,11 +80,11 @@ public class usoPartido {
     
     try {
     	// variables para obtener los datos
-    	int partidoId;
+    	String partidoId;
     	String equipo1;
-    	boolean gana1;
-    	boolean empata;
-    	boolean gana2;
+    	boolean gana1=false;
+    	boolean empata=false;
+    	boolean gana2=false;
     	String equipo2;
     	
   
@@ -104,18 +104,34 @@ public class usoPartido {
         
         String[] subcadenas = Pronostico.split(","); // separa según las comas
         
-        partidoId = Integer.parseInt(subcadenas[0].trim()); // .trim() elimina espacios en blanco
+        //partidoId = Integer.parseInt(subcadenas[0].trim()); // .trim() elimina espacios en blanco
+        partidoId=subcadenas[0].trim();
         equipo1 = subcadenas[1].trim();
-        gana1 = Boolean.valueOf(subcadenas[2].trim());
-        empata = Boolean.valueOf(subcadenas[3].trim());
-        gana2 = Boolean.valueOf(subcadenas[4].trim());
+        if (subcadenas[2].trim().equals("X")){
+        	//System.out.println(subcadenas[2]);
+        	gana1=true;
+        }
+        //gana1 = Boolean.valueOf(subcadenas[2].trim()=="X");
+        if (subcadenas[3].trim().equals("X")) {
+        	empata=true;
+        }
+        //empata = Boolean.valueOf(subcadenas[3].trim()=="X");
+        if (subcadenas[4].trim().equals("X")) {
+        	gana2=true;
+        }
+        
+        //gana2 = Boolean.valueOf(subcadenas[4].trim()=="X");
         equipo2 = subcadenas[5].trim();
         
+                
+       System.out.println("Partido "+String.valueOf(partidoId)+ "\n Equipo 1: " +equipo1.toString()+" Gana: "+gana1+" Empata: "+empata+" Equipo 2: "+equipo2.toString()+ " Gana: "+ gana2);
         
-        
-        //System.out.println(partidoId + " " +equipo1+" "+goles1+" "+equipo2+ " "+ goles2 );
-        
-        System.out.println(Pronostico);
+       //volver las variables a valor inicial
+       gana1=false;
+       gana2=false;
+       empata=false;
+       
+       // System.out.println(Pronostico);
         
         
         

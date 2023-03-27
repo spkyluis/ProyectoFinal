@@ -1,11 +1,10 @@
-idPartido,Equipo1,gana1,empata,gana2,Equipo2
-1,Qatar,X,,,Ecuador
-2,England,,X,,Iran
-3,Senegal,,,X,Netherlands
-4,USA,X,,,Wales
-5,Argentina,X,,,Saudi Arabia
-6,Denmark,,X,,Tunisia
-7,Mexico,X,,,Poland
+1,Qatar,,,,Ecuador
+2,England,,,,Iran
+3,Senegal,,,,Netherlands
+4,USA,,,,Wales
+5,Argentina,,,,Saudi Arabia
+6,Denmark,,,,Tunisia
+7,Mexico,,,,Poland
 8,France,,,,Australia
 9,Morocco,,,,Croatia
 10,Germany,,,,Japan
