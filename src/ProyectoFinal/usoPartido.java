@@ -1,7 +1,7 @@
 package ProyectoFinal;
-import java.io.File;  // Import the File class
-import java.io.FileNotFoundException;  // Import this class to handle errors
-import java.util.Scanner; // Import the Scanner class to read text files
+import java.io.File;  
+import java.io.FileNotFoundException; 
+import java.util.Scanner; 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -11,24 +11,17 @@ public class usoPartido {
 	public static int buscarIndicePartido(Partido[] partidos, String partidoId) {
 		
 		int encontrado=-1; //no encontrado
-	   System.out.println("entra en buscar indice partido");
 		for (int i = 0; i < partidos.length; i++) {
-	        if (partidos[i].getPartidoID().equals(partidoId)){//==partidoId) {//.equals(partidoId)) {
-	        	System.out.println(" partidos partidoID"+ partidos[i].getPartidoID()+"  partidoID" + partidoId );
-	        	System.out.println("indicepartido "+i);
+	        if (partidos[i].getPartidoID().equals(partidoId)){
 	        	encontrado= i;
-	            }
-	        /*else {
-	        	encontrado= -1;  // no encontrado
-	        }*/
-	        	
+	           }
 	    }
-		System.out.println("encontrado "+encontrado);
+		
 	    return encontrado; 
 	}	
 	
 	public static String quienGana (String equipo1,int goles1,String equipo2, int goles2) {
-		System.out.println(goles1+ "  quien gana  "+goles2);
+
 		if (goles1==goles2) {
 			return "empate";
 		}
@@ -53,8 +46,8 @@ public class usoPartido {
     	String equipo2;
     	int goles2;
     
-    	 int cuantasLineas = 0;
-    	 int indiceArchivo=0;
+    	int cuantasLineas = 0;
+    	int indiceArchivo=0;
     	 
     	int puntaje=0; 
     	 
@@ -72,82 +65,57 @@ public class usoPartido {
          
          Partido [] partidos = new Partido[cantidadParitdos];
          for (int i=0;i<partidos.length;i++) {
-        	 partidos[i]=new Partido("",0,"",0);
+        	 partidos[i]=new Partido("",0,"",0);    //inicializamos los partidos
          }
-      File resultado = new File("resultadosMod.csv");
-      Scanner archivoResultado = new Scanner(resultado);
+      
+         
+         File resultado = new File("resultadosMod.csv");
+         Scanner archivoResultado = new Scanner(resultado);
       
       
-      while (archivoResultado.hasNextLine()) {
-        String archivoPartidos = archivoResultado.nextLine();
+        while (archivoResultado.hasNextLine()) {
         
-        String[] subcadenas = archivoPartidos.split(","); // separa según las comas
+        	String archivoPartidos = archivoResultado.nextLine();
         
-        partidos[indiceArchivo].setPartidoID(subcadenas[0].trim()); //= Integer.parseInt(subcadenas[0].trim()); // .trim() elimina espacios en blanco
-        equipo1 = subcadenas[1].trim();
-        goles1 = Integer.parseInt(subcadenas[2].trim());
-        equipo2 = subcadenas[3].trim();
-        goles2 = Integer.parseInt(subcadenas[4].trim());
+        	String[] subcadenas = archivoPartidos.split(","); // separa según las comas
         
-        partidos[indiceArchivo].setEquipo1(equipo1);
-        partidos[indiceArchivo].setGoles1(goles1);
-        partidos[indiceArchivo].setEquipo2(equipo2);
-        partidos[indiceArchivo].setGoles2(goles2);
+        	partidos[indiceArchivo].setPartidoID(subcadenas[0].trim()); // .trim() elimina espacios en blanco
+        	equipo1 = subcadenas[1].trim();
+        	goles1 = Integer.parseInt(subcadenas[2].trim());
+        	equipo2 = subcadenas[3].trim();
+        	goles2 = Integer.parseInt(subcadenas[4].trim());
         
-        indiceArchivo++;
-        //System.out.println(partidoId + " " +equipo1+" "+goles1+" "+equipo2+ " "+ goles2 );
+        	partidos[indiceArchivo].setEquipo1(equipo1);
+        	partidos[indiceArchivo].setGoles1(goles1);
+        	partidos[indiceArchivo].setEquipo2(equipo2);
+        	partidos[indiceArchivo].setGoles2(goles2);
         
-        //System.out.println(archivoPartidos);
-        
- 
-        
-      }
+        	indiceArchivo++;
+          
+        }
       
-      /*for (int i=0; i<partidos.length;i++) {
-      	
-    	  int nroPartido=i+1;
-    	  System.out.println("Partido "+nroPartido+"\nEquipo 1: "+partidos[i].getEquipo1()+" Goles: "+
-    	  partidos[i].getGoles1()+"\nEquipo 2: "+partidos[i].getEquipo2()+" Goles: "+partidos[i].getGoles2()+"\n");
-      	
-      }*/
+        archivoResultado.close();
       
-      
-      archivoResultado.close();
-   /*   
-    } catch (FileNotFoundException e) {
-      System.out.println("A ocurrido un error.");
-      e.printStackTrace();
-    }
-    
-    
-    try {*/
     	// variables para obtener los datos
-    	//String partidoId;
-    	//String equipo1;
     	boolean gana1=false;
     	boolean empata=false;
     	boolean gana2=false;
-    	//String equipo2;
+
     	
-    	 Resultado res=Resultado.desconocido;
+    	Resultado res=Resultado.desconocido;
     
-    	 cuantasLineas = 0;
-         BufferedReader reader2 = new BufferedReader(new FileReader("pronostico.csv"));
-         while (reader2.readLine() != null) {   //va contando las líneas
+    	/*cuantasLineas = 0;
+        BufferedReader reader2 = new BufferedReader(new FileReader("pronostico.csv"));
+        while (reader2.readLine() != null) {   //va contando las líneas
              cuantasLineas++;
-         }
+        }*/
          //cuantasLineas--;   // sacamos el encabezado
-         reader.close();
+        //reader2.close();
          //System.out.println("El archivo tiene "+ cuantasLineas+" partidos");
     	
       File pronostico = new File("pronostico.csv");
       Scanner archivoPronostico = new Scanner(pronostico);
       
-     // Pronostico pronosticos[]=new Pronostico [cuantasLineas];
-      
-      //for (int i=0;i<pronosticos.length;i++) {
-     //	 pronosticos[i]=new Pronostico(null,"",res);
-      //}
       String partidoId2;
       
       while (archivoPronostico.hasNextLine()) {
@@ -156,22 +124,18 @@ public class usoPartido {
         String[] subcadenas = Pronostico.split(","); // separa según las comas
         
         partidoId2 = subcadenas[0].trim(); // .trim() elimina espacios en blanco
-        //partidoId=subcadenas[0].trim();
         equipo1 = subcadenas[1].trim();
+        
         if (subcadenas[2].trim().equals("X")){
-        	//System.out.println(subcadenas[2]);
         	gana1=true;
         }
-        //gana1 = Boolean.valueOf(subcadenas[2].trim()=="X");
         if (subcadenas[3].trim().equals("X")) {
         	empata=true;
         }
-        //empata = Boolean.valueOf(subcadenas[3].trim()=="X");
         if (subcadenas[4].trim().equals("X")) {
         	gana2=true;
         }
         
-        //gana2 = Boolean.valueOf(subcadenas[4].trim()=="X");
         equipo2 = subcadenas[5].trim();
         
         int indicePartido=-1;
@@ -180,35 +144,22 @@ public class usoPartido {
         
         if (indicePartido!=-1) {
         	
-        	//Pronostico pron = new Pronostico(partidos[indicePartido].getPartidoID(),);
-        	
         	// resutltadoParitdo es gana1, gana2 o empate
         	String resultadoPartido = quienGana(partidos[indicePartido].getEquipo1(),partidos[indicePartido].getGoles1(),partidos[indicePartido].getEquipo2(),partidos[indicePartido].getGoles2());
-        	System.out.println("resultadoPartido " +resultadoPartido+ " gana1 "+ gana1 + " gana2 " + gana2 + " empata " + empata);
+        	//System.out.println("resultadoPartido " +resultadoPartido+ " gana1 "+ gana1 + " gana2 " + gana2 + " empata " + empata);
         	if ((empata && resultadoPartido=="empate") || (gana1 && resultadoPartido=="equipo1") || (gana2 && resultadoPartido.equals("equipo2") )) {
         		
         		puntaje=puntaje+1;
-        		System.out.println("Suma puntos");
+        		//System.out.println("Suma puntos");
         	}
         	
-        	
-        	
         }
-        // comparar partidos[indicePartido] según el resutltado si indicePartido no es -1 
-        
-        // puntaje = puntaje +1 si acertó
-        
-                
-       System.out.println("Partido "+String.valueOf(partidoId2)+ "\n Equipo 1: " +equipo1.toString()+" Gana: "+gana1+" Empata: "+empata+" Equipo 2: "+equipo2.toString()+ " Gana: "+ gana2);
-        
+       
        //volver las variables a valor inicial
        gana1=false;
        gana2=false;
        empata=false;
-       
-       System.out.println();
-        
-        
+     
         
       }
       archivoPronostico.close();
@@ -221,9 +172,6 @@ public class usoPartido {
       System.out.println("A ocurrido un error.");
       e.printStackTrace();
     }
-    
-    
-  
     
   }
 }
