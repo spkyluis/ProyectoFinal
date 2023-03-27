@@ -80,7 +80,8 @@ public class usoPartido {
       for (int i=0; i<partidos.length;i++) {
       	
     	  int nroPartido=i+1;
-    	  System.out.println("Partido "+nroPartido+"\nEquipo 1: "+partidos[i].getEquipo1()+" Goles: "+partidos[i].getGoles1()+"\nEquipo 2: "+partidos[i].getEquipo2()+" Goles: "+partidos[i].getGoles2()+"\n");
+    	  System.out.println("Partido "+nroPartido+"\nEquipo 1: "+partidos[i].getEquipo1()+" Goles: "+
+    	  partidos[i].getGoles1()+"\nEquipo 2: "+partidos[i].getEquipo2()+" Goles: "+partidos[i].getGoles2()+"\n");
       	
       }
       

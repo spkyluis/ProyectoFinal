@@ -4,6 +4,9 @@ public class Pronostico {
 
 	private Partido partido;
 	private String /*Equipo*/ equipo; 
+	//private Equipo equipo;
+	
+
 	private Resultado resultado;
 	
 	public Pronostico(Partido part, /*Equipo*/ String equip, Resultado resul) {
