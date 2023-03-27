@@ -3,10 +3,10 @@ package ProyectoFinal;
 public class Pronostico {
 
 	private Partido partido;
-	private Equipo equipo;
+	private String /*Equipo*/ equipo; 
 	private Resultado resultado;
 	
-	public Pronostico(Partido part, Equipo equip, Resultado resul) {
+	public Pronostico(Partido part, /*Equipo*/ String equip, Resultado resul) {
 		
 		this.partido=part;
 		this.equipo=equip;
@@ -21,11 +21,11 @@ public class Pronostico {
 		this.partido = partido;
 	}
 
-	public Equipo getEquipo() {
+	public String /*Equipo*/ getEquipo() {
 		return equipo;
 	}
 
-	public void setEquipo(Equipo equipo) {
+	public void setEquipo(String /*Equipo*/ equipo) {
 		this.equipo = equipo;
 	}
 

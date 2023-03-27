@@ -2,6 +2,7 @@ package ProyectoFinal;
 
 public class Partido {
 	
+	private String partidoID;
 	//private Equipo equipo1;
 	private String equipo1;
 	//private Equipo equipo2;
@@ -16,6 +17,14 @@ public class Partido {
 		this.goles1=gol1;
 		this.equipo2=equi2;
 		this.goles2=gol2;
+	}
+
+	public String getPartidoID() {
+		return partidoID;
+	}
+
+	public void setPartidoID(String partidoID) {
+		this.partidoID = partidoID;
 	}
 
 	public String /*Equipo*/ getEquipo1() {

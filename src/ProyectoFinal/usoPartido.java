@@ -7,6 +7,17 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class usoPartido {
+	
+	public static int buscarIndicePartido(Partido[] partidos, String partidoId) {
+	    for (int i = 0; i < partidos.length; i++) {
+	        if (partidos[i].getPartidoID()==partidoId) {//.equals(partidoId)) {
+	            return i;
+	        }
+	    }
+	    return -1; // no encontrado
+	}	
+	
+	
   public static void main(String[] args) throws IOException {
     try {
     	// variables para obtener los datos
@@ -18,6 +29,9 @@ public class usoPartido {
     
     	 int cuantasLineas = 0;
     	 int indiceArchivo=0;
+    	 
+    	 
+    	 
     	 
          BufferedReader reader = new BufferedReader(new FileReader("resultadosMod.csv"));
          while (reader.readLine() != null) {   //va contando las líneas
@@ -72,40 +86,50 @@ public class usoPartido {
       
       
       archivoResultado.close();
+   /*   
     } catch (FileNotFoundException e) {
       System.out.println("A ocurrido un error.");
       e.printStackTrace();
     }
     
     
-    try {
+    try {*/
     	// variables para obtener los datos
-    	String partidoId;
-    	String equipo1;
+    	//String partidoId;
+    	//String equipo1;
     	boolean gana1=false;
     	boolean empata=false;
     	boolean gana2=false;
-    	String equipo2;
+    	//String equipo2;
     	
-  
-    	 int cuantasLineas = 0;
-         BufferedReader reader = new BufferedReader(new FileReader("pronostico.csv"));
-         while (reader.readLine() != null) {   //va contando las líneas
+    	 Resultado res=Resultado.desconocido;
+    
+    	 cuantasLineas = 0;
+         BufferedReader reader2 = new BufferedReader(new FileReader("pronostico.csv"));
+         while (reader2.readLine() != null) {   //va contando las líneas
              cuantasLineas++;
          }
          //cuantasLineas--;   // sacamos el encabezado
          reader.close();
          System.out.println("El archivo tiene "+ cuantasLineas+" partidos");
     	
-      File resultado = new File("pronostico.csv");
-      Scanner archivoResultado = new Scanner(resultado);
-      while (archivoResultado.hasNextLine()) {
-        String Pronostico = archivoResultado.nextLine();
+      File pronostico = new File("pronostico.csv");
+      Scanner archivoPronostico = new Scanner(pronostico);
+      
+     // Pronostico pronosticos[]=new Pronostico [cuantasLineas];
+      
+      //for (int i=0;i<pronosticos.length;i++) {
+     //	 pronosticos[i]=new Pronostico(null,"",res);
+      //}
+      String partidoId2;
+      
+      while (archivoPronostico.hasNextLine()) {
+        String Pronostico = archivoPronostico.nextLine();
         
         String[] subcadenas = Pronostico.split(","); // separa según las comas
         
-        //partidoId = Integer.parseInt(subcadenas[0].trim()); // .trim() elimina espacios en blanco
-        partidoId=subcadenas[0].trim();
+        partidoId2 = subcadenas[0].trim(); // .trim() elimina espacios en blanco
+        //partidoId=subcadenas[0].trim();
         equipo1 = subcadenas[1].trim();
         if (subcadenas[2].trim().equals("X")){
         	//System.out.println(subcadenas[2]);
@@ -123,8 +147,17 @@ public class usoPartido {
         //gana2 = Boolean.valueOf(subcadenas[4].trim()=="X");
         equipo2 = subcadenas[5].trim();
         
+        int indicePartido=-1;
+
+        indicePartido=buscarIndicePartido(partidos,partidoId2);
+        
+        
+        // comparar partidos[indicePartido] según el resutltado si indicePartido no es -1 
+        
+        // puntaje = puntaje +1 si acertó
+        
                 
-       System.out.println("Partido "+String.valueOf(partidoId)+ "\n Equipo 1: " +equipo1.toString()+" Gana: "+gana1+" Empata: "+empata+" Equipo 2: "+equipo2.toString()+ " Gana: "+ gana2);
+       System.out.println("Partido "+String.valueOf(partidoId2)+ "\n Equipo 1: " +equipo1.toString()+" Gana: "+gana1+" Empata: "+empata+" Equipo 2: "+equipo2.toString()+ " Gana: "+ gana2);
         
        //volver las variables a valor inicial
        gana1=false;
@@ -137,6 +170,10 @@ public class usoPartido {
         
       }
       archivoResultado.close();
+      
+      
+      
+      
     } catch (FileNotFoundException e) {
       System.out.println("A ocurrido un error.");
       e.printStackTrace();
