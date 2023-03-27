@@ -9,14 +9,40 @@ import java.io.IOException;
 public class usoPartido {
 	
 	public static int buscarIndicePartido(Partido[] partidos, String partidoId) {
-	    for (int i = 0; i < partidos.length; i++) {
-	        if (partidos[i].getPartidoID()==partidoId) {//.equals(partidoId)) {
-	            return i;
-	        }
+		
+		int encontrado=-1; //no encontrado
+	   System.out.println("entra en buscar indice partido");
+		for (int i = 0; i < partidos.length; i++) {
+	        if (partidos[i].getPartidoID().equals(partidoId)){//==partidoId) {//.equals(partidoId)) {
+	        	System.out.println(" partidos partidoID"+ partidos[i].getPartidoID()+"  partidoID" + partidoId );
+	        	System.out.println("indicepartido "+i);
+	        	encontrado= i;
+	            }
+	        /*else {
+	        	encontrado= -1;  // no encontrado
+	        }*/
+	        	
 	    }
-	    return -1; // no encontrado
+		System.out.println("encontrado "+encontrado);
+	    return encontrado; 
 	}	
 	
+	public static String quienGana (String equipo1,int goles1,String equipo2, int goles2) {
+		System.out.println(goles1+ "  quien gana  "+goles2);
+		if (goles1==goles2) {
+			return "empate";
+		}
+		else {
+			if (goles1>goles2) {
+				return "equipo1";
+			}
+			else {
+				return "equipo2";
+			}
+		} 
+		
+		
+	}
 	
   public static void main(String[] args) throws IOException {
     try {
@@ -30,7 +56,7 @@ public class usoPartido {
     	 int cuantasLineas = 0;
     	 int indiceArchivo=0;
     	 
-    	 
+    	int puntaje=0; 
     	 
     	 
          BufferedReader reader = new BufferedReader(new FileReader("resultadosMod.csv"));
@@ -42,7 +68,7 @@ public class usoPartido {
          
          int cantidadParitdos=cuantasLineas;
          
-         System.out.println("El archivo tiene "+ cuantasLineas+" partidos");
+         //System.out.println("El archivo tiene "+ cuantasLineas+" partidos");
          
          Partido [] partidos = new Partido[cantidadParitdos];
          for (int i=0;i<partidos.length;i++) {
@@ -57,7 +83,7 @@ public class usoPartido {
         
         String[] subcadenas = archivoPartidos.split(","); // separa según las comas
         
-        partidoId = Integer.parseInt(subcadenas[0].trim()); // .trim() elimina espacios en blanco
+        partidos[indiceArchivo].setPartidoID(subcadenas[0].trim()); //= Integer.parseInt(subcadenas[0].trim()); // .trim() elimina espacios en blanco
         equipo1 = subcadenas[1].trim();
         goles1 = Integer.parseInt(subcadenas[2].trim());
         equipo2 = subcadenas[3].trim();
@@ -77,13 +103,13 @@ public class usoPartido {
         
       }
       
-      for (int i=0; i<partidos.length;i++) {
+      /*for (int i=0; i<partidos.length;i++) {
       	
     	  int nroPartido=i+1;
     	  System.out.println("Partido "+nroPartido+"\nEquipo 1: "+partidos[i].getEquipo1()+" Goles: "+
     	  partidos[i].getGoles1()+"\nEquipo 2: "+partidos[i].getEquipo2()+" Goles: "+partidos[i].getGoles2()+"\n");
       	
-      }
+      }*/
       
       
       archivoResultado.close();
@@ -112,7 +138,7 @@ public class usoPartido {
          }
          //cuantasLineas--;   // sacamos el encabezado
          reader.close();
-         System.out.println("El archivo tiene "+ cuantasLineas+" partidos");
+         //System.out.println("El archivo tiene "+ cuantasLineas+" partidos");
     	
       File pronostico = new File("pronostico.csv");
       Scanner archivoPronostico = new Scanner(pronostico);
@@ -152,7 +178,22 @@ public class usoPartido {
 
         indicePartido=buscarIndicePartido(partidos,partidoId2);
         
-        
+        if (indicePartido!=-1) {
+        	
+        	//Pronostico pron = new Pronostico(partidos[indicePartido].getPartidoID(),);
+        	
+        	// resutltadoParitdo es gana1, gana2 o empate
+        	String resultadoPartido = quienGana(partidos[indicePartido].getEquipo1(),partidos[indicePartido].getGoles1(),partidos[indicePartido].getEquipo2(),partidos[indicePartido].getGoles2());
+        	System.out.println("resultadoPartido " +resultadoPartido+ " gana1 "+ gana1 + " gana2 " + gana2 + " empata " + empata);
+        	if ((empata && resultadoPartido=="empate") || (gana1 && resultadoPartido=="equipo1") || (gana2 && resultadoPartido.equals("equipo2") )) {
+        		
+        		puntaje=puntaje+1;
+        		System.out.println("Suma puntos");
+        	}
+        	
+        	
+        	
+        }
         // comparar partidos[indicePartido] según el resutltado si indicePartido no es -1 
         
         // puntaje = puntaje +1 si acertó
@@ -165,14 +206,15 @@ public class usoPartido {
        gana2=false;
        empata=false;
        
-       // System.out.println(Pronostico);
+       System.out.println();
         
         
         
       }
-      archivoResultado.close();
+      archivoPronostico.close();
       
-      
+      //muestra el puntaje
+      System.out.println("El puntaje obtenido por el usuario es "+puntaje);
       
       
     } catch (FileNotFoundException e) {
