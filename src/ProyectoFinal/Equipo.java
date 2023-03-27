@@ -1,6 +1,6 @@
 package ProyectoFinal;
 
-public class Equipo {
+/*public class Equipo {
 
 	private String nombre;
 	private String descripcion;
@@ -26,3 +26,4 @@ public class Equipo {
 	
 	
 }
+*/

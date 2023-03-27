@@ -2,12 +2,15 @@ package ProyectoFinal;
 
 public class Partido {
 	
-	private Equipo equipo1;
-	private Equipo equipo2;
+	//private Equipo equipo1;
+	private String equipo1;
+	//private Equipo equipo2;
+	private String equipo2;
 	private int goles1;
 	private int goles2;
 	
-	public Partido(Equipo equi1, int gol1, Equipo equi2, int gol2) {
+	//public Partido(Equipo equi1, int gol1, Equipo equi2, int gol2) {
+	public Partido(String equi1, int gol1, String equi2, int gol2) {
 		
 		this.equipo1=equi1;
 		this.goles1=gol1;
@@ -15,19 +18,19 @@ public class Partido {
 		this.goles2=gol2;
 	}
 
-	public Equipo getEquipo1() {
+	public String /*Equipo*/ getEquipo1() {
 		return equipo1;
 	}
 
-	public void setEquipo1(Equipo equipo1) {
+	public void setEquipo1(String /*Equipo*/ equipo1) {
 		this.equipo1 = equipo1;
 	}
 
-	public Equipo getEquipo2() {
+	public String /*Equipo*/ getEquipo2() {
 		return equipo2;
 	}
 
-	public void setEquipo2(Equipo equipo2) {
+	public void setEquipo2(String /*Equipo*/ equipo2) {
 		this.equipo2 = equipo2;
 	}
 
@@ -47,7 +50,7 @@ public class Partido {
 		this.goles2 = goles2;
 	}
 	
-	public Resultado resultado(Equipo equipo) {
+	public Resultado resultado(String /*Equipo*/ equipo) {
 		
 		// empate?
 		if (this.goles1==this.goles2) {
@@ -55,7 +58,7 @@ public class Partido {
 		}
 		
 		// resultado del equipo 1
-		if (equipo.getNombre()==this.equipo1.getNombre()) {
+		if (equipo/*.getNombre()*/==this.equipo1/*.getNombre()*/) {
 			if (this.goles1>this.goles2) {
 				return Resultado.ganador;
 			}
@@ -65,7 +68,7 @@ public class Partido {
 		}
 		
 		//resultado del equipo 2
-		if (equipo.getNombre()==this.equipo2.getNombre()) {
+		if (equipo/*.getNombre()*/==this.equipo2/*.getNombre()*/) {
 			if (this.goles2>this.goles1) {
 				return Resultado.ganador;
 			}
