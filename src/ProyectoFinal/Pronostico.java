@@ -3,7 +3,8 @@ package ProyectoFinal;
 public class Pronostico {
 
 	private Partido partido;
-	private Equipo equipo;
+	//private Equipo equipo;
+	
 	private Resultado resultado;
 	
 	public Pronostico(Partido part, Equipo equip, Resultado resul) {
