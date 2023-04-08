@@ -93,7 +93,7 @@ public class usoPartido {
          File resultado = new File("resultados.csv");
          Scanner archivoResultado = new Scanner(resultado);
       
-      System.out.println("resultados "+archivoResultado.hasNextLine());
+      // System.out.println("resultados "+archivoResultado.hasNextLine());
         while (archivoResultado.hasNextLine()) {
         
         	String archivoPartidos = archivoResultado.nextLine();
@@ -164,7 +164,7 @@ public class usoPartido {
       int cantidadJugadores=0;
       String pronostico;
       
-      //cuantos pronósticos tiene el archivo
+      //cuantos pronósticos tiene el archivo de acá sacamos la cantidad máxima de jugadores
       
       while((pronostico=readerPronostico.readLine()) != null) {
     	  cantidadMaxJugadores++;
@@ -175,14 +175,14 @@ public class usoPartido {
       BufferedReader readerPronostico2 = new BufferedReader(new FileReader("pronostico.csv"));
       
       
-      System.out.println(cantidadMaxJugadores);
+     // System.out.println(cantidadMaxJugadores);
       
       //armar arreglo de nombres de los jugadores
     //  while (archivoPronostico.hasNextLine()) {
        while ((pronostico = readerPronostico2.readLine()) != null) { 	  
     	//String Pronostico = archivoPronostico.nextLine();
     	//System.out.println("entra acá");
-    	String[] subcadenas = pronostico.split(";"); // separa según las comas
+    	String[] subcadenas = pronostico.split(";"); // separa según los punto y comas
 
     	if (subcadenas.length!=1) {
    // 	System.out.println("PASA POR ACA "+ subcadenas.length);
