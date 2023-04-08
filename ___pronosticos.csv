@@ -1,0 +1,56 @@
+1,Qatar,X,,,Ecuador,José
+2,England,,X,,Iran,José
+3,Senegal,,,X,Netherlands,José
+4,USA,X,,,Wales,José
+5,Argentina,X,,,Saudi Arabia,José
+6,Denmark,,X,,Tunisia,José
+7,Mexico,X,,,Poland,José
+8,France,,X,,Australia,José
+1,Qatar,,X,,Ecuador,María
+2,England,X,,,Iran,María
+3,Senegal,,X,,Netherlands,María
+4,USA,X,,,Wales,María
+5,Argentina,,,X,Saudi Arabia,María
+6,Denmark,X,,,Tunisia,María
+7,Mexico,,,X,Poland,María
+8,France,X,,,Australia,María
+9,Morocco,,,,Croatia,
+10,Germany,,,,Japan,
+11,Spain,,,,Costa Rica,
+12,Belgium,,,,Canada,
+13,Switzerland,,,,Cameroon,
+14,Uruguay,,,,Korea Republic,
+15,Portugal,,,,Ghana,
+16,Brazil,,,,Serbia,
+17,Wales,,,,Iran,
+18,Qatar,,,,Senegal,
+19,Netherlands,,,,Ecuador,
+20,England,,,,USA,
+21,Tunisia,,,,Australia,
+22,Poland,,,,Saudi Arabia,
+23,France,,,,Denmark,
+24,Argentina,,,,Mexico,
+25,Japan,,,,Costa Rica,
+26,Belgium,,,,Morocco,
+27,Croatia,,,,Canada,
+28,Spain,,,,Germany,
+29,Cameroon,,,,Serbia,
+30,Korea Republic,,,,Ghana,
+31,Brazil,,,,Switzerland,
+32,Portugal,,,,Uruguay,
+33,Ecuador,,,,Senegal,
+34,Netherlands,,,,Qatar,
+35,Wales,,,,England,
+36,Iran,,,,USA,
+37,Australia,,,,Denmark,
+38,Tunisia,,,,France,
+39,Poland,,,,Argentina,
+40,Saudi Arabia,,,,Mexico,
+41,Croatia,,,,Belgium,
+42,Canada,,,,Morocco,
+43,Japan,,,,Spain,
+44,Costa Rica,,,,Germany,
+45,Ghana,,,,Uruguay,
+46,Korea Republic,,,,Portugal,
+47,Serbia,,,,Switzerland,
+48,Cameroon,,,,Brazil,
