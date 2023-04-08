@@ -1,4 +1,4 @@
-package ProyectoFinal;
+
 import java.io.File;  
 import java.io.FileNotFoundException; 
 import java.util.Scanner; 
@@ -275,9 +275,10 @@ public class usoPartido {
       
       
       //muestra el puntaje
+      //por ahora, el puntaje es igual a la cantidad de resultados acertados
       //System.out.println("El puntaje obtenido por el usuario es "+puntaje);
       for (int i=0; i < cantidadJugadores; i++) {
-    	  System.out.println("El puntaje del jugador "+jugadores[i]+" es "+puntajes[i]); 
+    	  System.out.println("El puntaje del jugador "+jugadores[i]+" es "+puntajes[i]+" y acertó "+puntajes[i]+" resultados." ); 
       }
       
       

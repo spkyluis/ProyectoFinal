@@ -1,4 +1,4 @@
-package ProyectoFinal;
+
 
 public enum Resultado {
 	ganador,
