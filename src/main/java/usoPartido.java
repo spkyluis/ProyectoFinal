@@ -99,14 +99,15 @@ public class usoPartido {
         	String archivoPartidos = archivoResultado.nextLine();
   
         	String[] subcadenas = archivoPartidos.split(","); // separa según las comas
-       	
+        	
+        	
         	partidos[indiceArchivo].setPartidoID(subcadenas[0].trim()); // .trim() elimina espacios en blanco
         	equipo1 = subcadenas[1].trim();
         	goles1 = Integer.parseInt(subcadenas[2].trim());
         	goles2 = Integer.parseInt(subcadenas[3].trim());
         	equipo2 = subcadenas[4].trim();
         	ronda= Integer.parseInt(subcadenas[5].trim());
-        	
+        	       	
         	partidos[indiceArchivo].setRonda(ronda);
         	partidos[indiceArchivo].setEquipo1(equipo1);
         	partidos[indiceArchivo].setGoles1(goles1);
@@ -280,12 +281,16 @@ public class usoPartido {
       for (int i=0; i < cantidadJugadores; i++) {
     	  System.out.println("El puntaje del jugador "+jugadores[i]+" es "+puntajes[i]+" y acertó "+puntajes[i]+" resultados." ); 
       }
+         
       
-      
-    } catch (FileNotFoundException e) {
+    } catch (FileNotFoundException e) {     // error en el manejo de los archivos
       System.out.println("A ocurrido un error.");
       e.printStackTrace();
     }
+    catch (NumberFormatException errorFormato) {     // error en la conversión a int de los goles (String a int)
+		System.out.println("Se intentó cargar un valor de goles no permitido");
+		
+	}
     
   }
 }
