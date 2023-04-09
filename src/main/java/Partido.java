@@ -12,9 +12,10 @@ public class Partido {
 	private int ronda;
 	
 	//public Partido(Equipo equi1, int gol1, Equipo equi2, int gol2) {
-	public Partido(int rond, String equi1, int gol1, String equi2, int gol2) {
+	public Partido(String partId, String equi1, int gol1, String equi2, int gol2, int rond) {
 		
 		this.ronda=rond;
+		this.partidoID=partId;
 		this.equipo1=equi1;
 		this.goles1=gol1;
 		this.equipo2=equi2;

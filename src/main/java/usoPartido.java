@@ -86,7 +86,7 @@ public class usoPartido {
          
          Partido [] partidos = new Partido[cantidadParitdos];
          for (int i=0;i<partidos.length;i++) {
-        	 partidos[i]=new Partido(0,"",0,"",0);    //inicializamos los partidos
+        	 partidos[i]=new Partido("","",0,"",0,0);    //inicializamos los partidos  id, equipo1, goles1, equipo2, goles2, ronda
          }
       
          
