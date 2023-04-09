@@ -9,10 +9,12 @@ public class Partido {
 	private String equipo2;
 	private int goles1;
 	private int goles2;
+	private int ronda;
 	
 	//public Partido(Equipo equi1, int gol1, Equipo equi2, int gol2) {
-	public Partido(String equi1, int gol1, String equi2, int gol2) {
+	public Partido(int rond, String equi1, int gol1, String equi2, int gol2) {
 		
+		this.ronda=rond;
 		this.equipo1=equi1;
 		this.goles1=gol1;
 		this.equipo2=equi2;
@@ -59,6 +61,15 @@ public class Partido {
 		this.goles2 = goles2;
 	}
 	
+		
+	public int getRonda() {
+		return ronda;
+	}
+
+	public void setRonda(int ronda) {
+		this.ronda = ronda;
+	}
+
 	public Resultado resultado(String /*Equipo*/ equipo) {
 		
 		// empate?

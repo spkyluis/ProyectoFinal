@@ -86,7 +86,7 @@ public class usoPartido {
          
          Partido [] partidos = new Partido[cantidadParitdos];
          for (int i=0;i<partidos.length;i++) {
-        	 partidos[i]=new Partido("",0,"",0);    //inicializamos los partidos
+        	 partidos[i]=new Partido(0,"",0,"",0);    //inicializamos los partidos
          }
       
          
@@ -97,17 +97,17 @@ public class usoPartido {
         while (archivoResultado.hasNextLine()) {
         
         	String archivoPartidos = archivoResultado.nextLine();
-       	
   
         	String[] subcadenas = archivoPartidos.split(","); // separa según las comas
-        
+       	
         	partidos[indiceArchivo].setPartidoID(subcadenas[0].trim()); // .trim() elimina espacios en blanco
         	equipo1 = subcadenas[1].trim();
         	goles1 = Integer.parseInt(subcadenas[2].trim());
         	goles2 = Integer.parseInt(subcadenas[3].trim());
         	equipo2 = subcadenas[4].trim();
         	ronda= Integer.parseInt(subcadenas[5].trim());
-        
+        	
+        	partidos[indiceArchivo].setRonda(ronda);
         	partidos[indiceArchivo].setEquipo1(equipo1);
         	partidos[indiceArchivo].setGoles1(goles1);
         	partidos[indiceArchivo].setEquipo2(equipo2);
@@ -125,7 +125,7 @@ public class usoPartido {
     	boolean gana2=false;
 
     	
-    	Resultado res=Resultado.desconocido;
+    	//Resultado res=Resultado.desconocido;
     	
     	//recorremos el archivo de pronósticos para saber cuántos hay
     	//a lo sumo, si todos fueran de distintas personas, sabemos ya cuántas personas hay como máximo
