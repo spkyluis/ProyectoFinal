@@ -26,7 +26,6 @@ public class usoPartido {
 		
 		 for (int i = 0; i < jugadores.length; i++) {
 			 
-			 //System.out.println("buscarjugador " +jugadores[i]+"  "+nombre);
 			 if (jugadores[i]!=null) {  //no puede comparar string con null
 	            if (jugadores[i].equals(nombre)) {
 	                encontrado = i;
@@ -34,7 +33,7 @@ public class usoPartido {
 	            }
 	        }
 		 }
-	//	 System.out.println("encontrado "+encontrado);
+
 		 return encontrado;
 	}
 	
@@ -72,17 +71,15 @@ public class usoPartido {
     	
     	String jugador;
     	
-    	 
+    	 // cuenta las líneas del archivo
          BufferedReader reader = new BufferedReader(new FileReader("resultados.csv"));
-         while (reader.readLine() != null) {   //va contando las líneas
-             cuantasLineas++;
+         while (reader.readLine() != null) {  
+             cuantasLineas++;   //va contando las líneas
          }
          //cuantasLineas--;   // sacamos el encabezado
          reader.close();
          
          int cantidadParitdos=cuantasLineas;
-         
-         //System.out.println("El archivo tiene "+ cuantasLineas+" partidos");
          
          Partido [] partidos = new Partido[cantidadParitdos];
          for (int i=0;i<partidos.length;i++) {
@@ -93,7 +90,6 @@ public class usoPartido {
          File resultado = new File("resultados.csv");
          Scanner archivoResultado = new Scanner(resultado);
       
-      // System.out.println("resultados "+archivoResultado.hasNextLine());
         while (archivoResultado.hasNextLine()) {
         
         	String archivoPartidos = archivoResultado.nextLine();
@@ -124,10 +120,7 @@ public class usoPartido {
     	boolean gana1=false;
     	boolean empata=false;
     	boolean gana2=false;
-
-    	
-    	//Resultado res=Resultado.desconocido;
-    	
+   	
     	//recorremos el archivo de pronósticos para saber cuántos hay
     	//a lo sumo, si todos fueran de distintas personas, sabemos ya cuántas personas hay como máximo
     	
@@ -139,7 +132,6 @@ public class usoPartido {
         }
         //cuantasLineas--;   // sacamos el encabezado
         reader2.close();
-         //System.out.println("El archivo tiene "+ cuantasLineas+" partidos");
     	
         //creamos arreglo de jugadores
         String jugadores[] = new String [cuantasLineas];
@@ -150,23 +142,15 @@ public class usoPartido {
         //en jugadores[x] tenemos el nombre del jugador y en puntajes[x] tenemos el puntaje de ese jugador
         
         
-     /*   
-      File pronostico = new File("pronostico.csv");
-      Scanner archivoPronostico = new Scanner(pronostico);
- System.out.println(archivoPronostico.hasNextLine()); */
-        
-        BufferedReader readerPronostico = new BufferedReader(new FileReader("pronostico.csv"));
-        
-        
+      BufferedReader readerPronostico = new BufferedReader(new FileReader("pronostico.csv"));
+           
       String partidoId2;
       
-      //System.out.println(archivoPronostico);
       int cantidadMaxJugadores=0;
       int cantidadJugadores=0;
       String pronostico;
       
       //cuantos pronósticos tiene el archivo de acá sacamos la cantidad máxima de jugadores
-      
       while((pronostico=readerPronostico.readLine()) != null) {
     	  cantidadMaxJugadores++;
       }
@@ -175,48 +159,35 @@ public class usoPartido {
       
       BufferedReader readerPronostico2 = new BufferedReader(new FileReader("pronostico.csv"));
       
-      
-     // System.out.println(cantidadMaxJugadores);
-      
       //armar arreglo de nombres de los jugadores
-    //  while (archivoPronostico.hasNextLine()) {
+
        while ((pronostico = readerPronostico2.readLine()) != null) { 	  
-    	//String Pronostico = archivoPronostico.nextLine();
-    	//System.out.println("entra acá");
+
     	String[] subcadenas = pronostico.split(";"); // separa según los punto y comas
 
     	if (subcadenas.length!=1) {
-   // 	System.out.println("PASA POR ACA "+ subcadenas.length);
+
     	jugador = subcadenas[6].trim(); // nombre del jugador
-    //	System.out.println("Jugador "+jugador + " equipo 1 " + subcadenas[1]);
     	
     	if (buscarJugador(jugadores, jugador)==-1) {   // no encontrado
-    	//	System.out.println(buscarJugador(jugadores,jugador));
+ 
     		jugadores[cantidadJugadores]=jugador;// agrego el jugador al arreglo
     		puntajes[cantidadJugadores]=0;  // pongo en 0 el puntaje del jugador
-    	//	System.out.println(jugadores[cantidadJugadores] + "  "+puntajes[cantidadJugadores]);
+
     		cantidadJugadores++;  // voy a tener en definitiva la cantidad de jugadores
     							// NO OLVIDAR QUE ES CANTIDAD TOTAL hay que usar -1 para acceder a cada jugador
     	}
     	}
     	
-    	//System.out.println(jugadores[0] + " " +jugadores[1] + " " + cantidadJugadores);
-    	
       }
     	
-      //archivoPronostico.close(); // verificar si es necesario cerrar el archivo o si se puede reutilizar
       readerPronostico2.close();
+   
       
-      
-      
-      
-      //Scanner archivoPronostico3 = new Scanner(pronostico);
       BufferedReader readerPronostico3 = new BufferedReader(new FileReader("pronostico.csv"));
-      
-      
+          
       while ((pronostico = readerPronostico3.readLine()) != null) {
-        //String Pronostico = archivoPronostico3.nextLine();
-        
+                
         String[] subcadenas = pronostico.split(";"); // separa según los punto y comas al cambiar por comas no funciona ¯\_(ツ)_/¯
         
         if (subcadenas.length!=1) {
@@ -238,8 +209,6 @@ public class usoPartido {
         jugador = subcadenas[6].trim();
         
         
-        
-        
         int indiceJugador=-1;
         
         int indicePartido=-1;
@@ -250,15 +219,14 @@ public class usoPartido {
         	
         	// resutltadoPartido es gana1, gana2 o empate
         	String resultadoPartido = quienGana(partidos[indicePartido].getEquipo1(),partidos[indicePartido].getGoles1(),partidos[indicePartido].getEquipo2(),partidos[indicePartido].getGoles2());
-        	//System.out.println("resultadoPartido " +resultadoPartido+ " gana1 "+ gana1 + " gana2 " + gana2 + " empata " + empata);
+        	
         	if ((empata && resultadoPartido=="empate") || (gana1 && resultadoPartido=="equipo1") || (gana2 && resultadoPartido.equals("equipo2") )) {
         		indiceJugador=buscarJugador(jugadores, jugador);  // indiceJugador el índice donde está el jugador del pronóstico actual
         		if (indiceJugador!=-1) {
         			// encontró el jugador
         			puntajes[indiceJugador]++;
-        		} // si no encontró el jugador es un pronóstico no válido (no se sabe qué jugador lo hizo)
-        		//puntaje=puntaje+1;
-        		System.out.println("Suma puntos el jugador "+jugadores[indiceJugador]);
+        		} // si no encontró el jugador es un pronóstico no válido (no se sabe qué jugador lo hizo) entonces no se hace nada
+        		
         	}
         	
         }
@@ -270,14 +238,12 @@ public class usoPartido {
      
         } 
       }
-      readerPronostico3.close(); //archivoPronostico3.close();
-      
-      
-      
+      readerPronostico3.close();
+
       
       //muestra el puntaje
       //por ahora, el puntaje es igual a la cantidad de resultados acertados
-      //System.out.println("El puntaje obtenido por el usuario es "+puntaje);
+
       for (int i=0; i < cantidadJugadores; i++) {
     	  System.out.println("El puntaje del jugador "+jugadores[i]+" es "+puntajes[i]+" y acertó "+puntajes[i]+" resultados." ); 
       }
