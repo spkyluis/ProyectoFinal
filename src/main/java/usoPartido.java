@@ -54,6 +54,7 @@ public class usoPartido {
 		
 	}
 	
+	
   public static void main(String[] args) throws IOException {
     try {
     	// variables para obtener los datos
@@ -71,7 +72,30 @@ public class usoPartido {
     	
     	String jugador;
     	
-    	 // cuenta las líneas del archivo
+    	// variables de configuración
+    	int puntosGanador=0;
+    	int puntosExtraRonda=0;
+    	int puntosExtraFase=0;
+    	String baseDatos;
+    	String configuracion;
+    	
+    	BufferedReader readerconfig = new BufferedReader(new FileReader("config.csv"));
+        while ((configuracion=readerconfig.readLine()) != null) {   // lee el archivo de configuración
+        	// base de datos, puntos ganador, puntos extra ronda, puntos extra fase
+        	String[] subcadenas = configuracion.split(",");
+        	
+        	baseDatos=subcadenas[0].trim();
+        	puntosGanador=Integer.parseInt(subcadenas[1].trim());
+        	puntosExtraRonda=Integer.parseInt(subcadenas[2].trim());
+        	puntosExtraFase=Integer.parseInt(subcadenas[3].trim());
+
+        }
+        
+        readerconfig.close();
+    	
+    	
+    	
+    	// cuenta las líneas del archivo
          BufferedReader reader = new BufferedReader(new FileReader("resultados.csv"));
          while (reader.readLine() != null) {  
              cuantasLineas++;   //va contando las líneas
@@ -139,7 +163,10 @@ public class usoPartido {
         //creamos arreglo de puntajes
         int puntajes[] = new int [cuantasLineas];
         
-        //en jugadores[x] tenemos el nombre del jugador y en puntajes[x] tenemos el puntaje de ese jugador
+        //creamos arreglo de cantidad de aciertos
+        int aciertos[] = new int [cuantasLineas];
+        
+        //en jugadores[x] tenemos el nombre del jugador, en puntajes[x] tenemos el puntaje de ese jugador y en aciertos[x] la cantidad de pronósticos acertados
         
         
       BufferedReader readerPronostico = new BufferedReader(new FileReader("pronostico.csv"));
@@ -224,7 +251,8 @@ public class usoPartido {
         		indiceJugador=buscarJugador(jugadores, jugador);  // indiceJugador el índice donde está el jugador del pronóstico actual
         		if (indiceJugador!=-1) {
         			// encontró el jugador
-        			puntajes[indiceJugador]++;
+        			puntajes[indiceJugador]=puntajes[indiceJugador]+puntosGanador;  // suma los puntos por haber acertado
+        			aciertos[indiceJugador]++;  // suma un acierto más
         		} // si no encontró el jugador es un pronóstico no válido (no se sabe qué jugador lo hizo) entonces no se hace nada
         		
         	}
@@ -245,7 +273,7 @@ public class usoPartido {
       //por ahora, el puntaje es igual a la cantidad de resultados acertados
 
       for (int i=0; i < cantidadJugadores; i++) {
-    	  System.out.println("El puntaje del jugador "+jugadores[i]+" es "+puntajes[i]+" y acertó "+puntajes[i]+" resultados." ); 
+    	  System.out.println("El puntaje del jugador "+jugadores[i]+" es "+puntajes[i]+" y acertó "+aciertos[i]+" resultados." ); 
       }
          
       
