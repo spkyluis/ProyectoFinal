@@ -5,6 +5,7 @@ import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.*;
 
 public class usoPartido {
 	
@@ -55,7 +56,7 @@ public class usoPartido {
 	}
 	
 	
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) throws IOException, SQLException {
     try {
     	// variables para obtener los datos
     	int partidoId;
@@ -76,9 +77,11 @@ public class usoPartido {
     	int puntosGanador=0;
     	int puntosExtraRonda=0;
     	int puntosExtraFase=0;
-    	String baseDatos;
+    	String baseDatos="";
     	String configuracion;
     	
+    		
+    	// leer archivo de configuración y cargar los valores
     	BufferedReader readerconfig = new BufferedReader(new FileReader("config.csv"));
         while ((configuracion=readerconfig.readLine()) != null) {   // lee el archivo de configuración
         	// base de datos, puntos ganador, puntos extra ronda, puntos extra fase
@@ -94,7 +97,73 @@ public class usoPartido {
         readerconfig.close();
     	
     	
-    	
+        
+         // Establecer la URL de la base de datos, el usuario y la contraseña
+        //String url = "jdbc:mysql://localhost:3306/mi_base_de_datos";
+        String usuario = "root";
+        String contrasena = "";
+        String consultaSQL = "";
+        int cantidadRegistros=0;
+
+        // Establecer la conexión a la base de datos
+        Connection conexion = DriverManager.getConnection(baseDatos, usuario, contrasena);
+        
+        // buscar todos los partidos
+        consultaSQL="SELECT * FROM partido";
+        
+        // Crear un objeto Statement
+        Statement statement = conexion.createStatement();
+
+        // Ejecutar la consulta y obtener un ResultSet con los datos buscados
+        ResultSet resultSet = statement.executeQuery(consultaSQL);
+        
+        // recorrer el resultset para saber cuántos registros hay
+        while (resultSet.next()) {
+        	cantidadRegistros++;
+        }
+        System.out.println(cantidadRegistros);
+        
+        // inicializamos arreglo de partidos
+        int cantidadParitdos=cantidadRegistros;
+        
+        Partido [] partidos = new Partido[cantidadParitdos];
+        for (int i=0;i<partidos.length;i++) {
+       	 partidos[i]=new Partido("","",0,"",0,0);    //inicializamos los partidos  id, equipo1, goles1, equipo2, goles2, ronda
+        }
+        
+        // ejecutamos de nuevo la consulta 
+        resultSet = statement.executeQuery(consultaSQL);
+        
+        // recorrer ResultSet y leer los datos
+        while (resultSet.next()) {
+            // Leer los datos de cada columna del ResultSet
+            String equi1 = resultSet.getString("equipo1");
+            int gol1 = resultSet.getInt("goles1");
+            String equi2 = resultSet.getString("equipo2");
+            int gol2 = resultSet.getInt("goles2");
+            int rond = resultSet.getInt("idRonda");
+            
+            //guardar los datos en el arreglo
+            partidos[indiceArchivo].setRonda(rond);
+        	partidos[indiceArchivo].setEquipo1(equi1);
+        	partidos[indiceArchivo].setGoles1(gol1);
+        	partidos[indiceArchivo].setEquipo2(equi2);
+        	partidos[indiceArchivo].setGoles2(gol2);
+        
+          	indiceArchivo++;
+           /* 
+            System.out.println("Equipo 1 "+ equi1+" goles "+gol1);
+            System.out.println("Equipo 2 "+ equi2+" goles "+gol2);
+            System.out.println("Ronda "+ rond);
+            */
+
+            
+        }
+        
+        
+        
+        
+    	/*
     	// cuenta las líneas del archivo
          BufferedReader reader = new BufferedReader(new FileReader("resultados.csv"));
          while (reader.readLine() != null) {  
@@ -102,15 +171,11 @@ public class usoPartido {
          }
          //cuantasLineas--;   // sacamos el encabezado
          reader.close();
+         */
+        
          
-         int cantidadParitdos=cuantasLineas;
-         
-         Partido [] partidos = new Partido[cantidadParitdos];
-         for (int i=0;i<partidos.length;i++) {
-        	 partidos[i]=new Partido("","",0,"",0,0);    //inicializamos los partidos  id, equipo1, goles1, equipo2, goles2, ronda
-         }
       
-         
+         /*
          File resultado = new File("resultados.csv");
          Scanner archivoResultado = new Scanner(resultado);
       
@@ -139,7 +204,9 @@ public class usoPartido {
         }
       
         archivoResultado.close();
-      
+         */
+         
+         
     	// variables para obtener los datos
     	boolean gana1=false;
     	boolean empata=false;
@@ -270,7 +337,6 @@ public class usoPartido {
 
       
       //muestra el puntaje
-      //por ahora, el puntaje es igual a la cantidad de resultados acertados
 
       for (int i=0; i < cantidadJugadores; i++) {
     	  System.out.println("El puntaje del jugador "+jugadores[i]+" es "+puntajes[i]+" y acertó "+aciertos[i]+" resultados." ); 

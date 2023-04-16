@@ -1,29 +1,30 @@
 
+public class Equipo {
 
-/*public class Equipo {
-
+	private String idEquipo;
 	private String nombre;
-	private String descripcion;
 	
-	public Equipo (String nom, String desc) {
+	public Equipo (String id, String nom) {
 		
+		this.idEquipo=id;
 		this.nombre=nom;
-		this.descripcion=desc;
 	}
-	
+
+	public String getIdEquipo() {
+		return idEquipo;
+	}
+
+	public void setIdEquipo(String idEquipo) {
+		this.idEquipo = idEquipo;
+	}
+
 	public String getNombre() {
 		return nombre;
 	}
+
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public String getDescripcion() {
-		return descripcion;
-	}
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
-	
 	
 }
-*/
+
