@@ -2,7 +2,7 @@
 
 public class Partido {
 	
-	private String partidoID;
+	private int partidoID;
 	//private Equipo equipo1;
 	private String equipo1;
 	//private Equipo equipo2;
@@ -10,9 +10,10 @@ public class Partido {
 	private int goles1;
 	private int goles2;
 	private int ronda;
+	private String resultado; 
 	
 	//public Partido(Equipo equi1, int gol1, Equipo equi2, int gol2) {
-	public Partido(String partId, String equi1, int gol1, String equi2, int gol2, int rond) {
+	public Partido(int partId, String equi1, int gol1, String equi2, int gol2, int rond) {
 		
 		this.ronda=rond;
 		this.partidoID=partId;
@@ -20,13 +21,14 @@ public class Partido {
 		this.goles1=gol1;
 		this.equipo2=equi2;
 		this.goles2=gol2;
+		this.resultado="desconocido";
 	}
 
-	public String getPartidoID() {
+	public int getPartidoID() {
 		return partidoID;
 	}
 
-	public void setPartidoID(String partidoID) {
+	public void setPartidoID(int partidoID) {
 		this.partidoID = partidoID;
 	}
 
@@ -71,6 +73,15 @@ public class Partido {
 		this.ronda = ronda;
 	}
 
+	
+	public String getResultado() {
+		return resultado;
+	}
+
+	public void setResultado(String resultado) {
+		this.resultado = resultado;
+	}
+
 	public Resultado resultado(String /*Equipo*/ equipo) {
 		
 		// empate?
@@ -100,6 +111,5 @@ public class Partido {
 		
 		//error, el equipo no coincide
 		return Resultado.desconocido;
-	}
-	
+	} 
 }

@@ -12,8 +12,9 @@ public class usoPartido {
 	public static int buscarIndicePartido(Partido[] partidos, String partidoId) {
 		
 		int encontrado=-1; //no encontrado
+		int partidoIdInt=Integer.parseInt(partidoId);
 		for (int i = 0; i < partidos.length; i++) {
-	        if (partidos[i].getPartidoID().equals(partidoId)){
+	        if (partidos[i].getPartidoID()==partidoIdInt){
 	        	encontrado= i;
 	           }
 	    }
@@ -45,10 +46,10 @@ public class usoPartido {
 		}
 		else {
 			if (goles1>goles2) {
-				return "equipo1";
+				return "gana1";
 			}
 			else {
-				return "equipo2";
+				return "gana2";
 			}
 		} 
 		
@@ -59,12 +60,7 @@ public class usoPartido {
   public static void main(String[] args) throws IOException, SQLException {
     try {
     	// variables para obtener los datos
-    	int partidoId;
-    	String equipo1;
-    	int goles1;
-    	String equipo2;
-    	int goles2;
-    	int ronda;
+
     
     	int cuantasLineas = 0;
     	int indiceArchivo=0;
@@ -81,7 +77,7 @@ public class usoPartido {
     	String configuracion;
     	
     		
-    	// leer archivo de configuración y cargar los valores
+    	// lee archivo de configuración y carga los valores
     	BufferedReader readerconfig = new BufferedReader(new FileReader("config.csv"));
         while ((configuracion=readerconfig.readLine()) != null) {   // lee el archivo de configuración
         	// base de datos, puntos ganador, puntos extra ronda, puntos extra fase
@@ -98,45 +94,45 @@ public class usoPartido {
     	
     	
         
-         // Establecer la URL de la base de datos, el usuario y la contraseña
-        //String url = "jdbc:mysql://localhost:3306/mi_base_de_datos";
+        // Establece datos de la base de datos, el usuario y la contraseña
         String usuario = "root";
         String contrasena = "";
         String consultaSQL = "";
         int cantidadRegistros=0;
 
-        // Establecer la conexión a la base de datos
+        // Establece la conexión a la base de datos
         Connection conexion = DriverManager.getConnection(baseDatos, usuario, contrasena);
         
-        // buscar todos los partidos
+        // busca todos los partidos
         consultaSQL="SELECT * FROM partido";
         
-        // Crear un objeto Statement
+        // Crea un objeto Statement
         Statement statement = conexion.createStatement();
 
-        // Ejecutar la consulta y obtener un ResultSet con los datos buscados
+        // Ejecuta la consulta y obtiene un ResultSet con los datos buscados
         ResultSet resultSet = statement.executeQuery(consultaSQL);
         
-        // recorrer el resultset para saber cuántos registros hay
+        // recorre el resultset para saber cuántos registros hay
         while (resultSet.next()) {
         	cantidadRegistros++;
         }
-        System.out.println(cantidadRegistros);
+        System.out.println("Cantidad de partidos "+cantidadRegistros);
         
-        // inicializamos arreglo de partidos
+        // inicializa arreglo de partidos
         int cantidadParitdos=cantidadRegistros;
         
         Partido [] partidos = new Partido[cantidadParitdos];
         for (int i=0;i<partidos.length;i++) {
-       	 partidos[i]=new Partido("","",0,"",0,0);    //inicializamos los partidos  id, equipo1, goles1, equipo2, goles2, ronda
+       	 partidos[i]=new Partido(0,"",0,"",0,0);    //inicializa los partidos  id, equipo1, goles1, equipo2, goles2, ronda
         }
         
-        // ejecutamos de nuevo la consulta 
+        // ejecuta de nuevo la consulta 
         resultSet = statement.executeQuery(consultaSQL);
         
         // recorrer ResultSet y leer los datos
         while (resultSet.next()) {
-            // Leer los datos de cada columna del ResultSet
+            // leer los datos de cada columna del ResultSet
+        	int partidoId = resultSet.getInt("idPartido");
             String equi1 = resultSet.getString("equipo1");
             int gol1 = resultSet.getInt("goles1");
             String equi2 = resultSet.getString("equipo2");
@@ -145,203 +141,143 @@ public class usoPartido {
             
             //guardar los datos en el arreglo
             partidos[indiceArchivo].setRonda(rond);
-        	partidos[indiceArchivo].setEquipo1(equi1);
+            partidos[indiceArchivo].setPartidoID(partidoId);
+            partidos[indiceArchivo].setEquipo1(equi1);
         	partidos[indiceArchivo].setGoles1(gol1);
         	partidos[indiceArchivo].setEquipo2(equi2);
         	partidos[indiceArchivo].setGoles2(gol2);
         
+        	// calcula el resultado puede ser gana1, gana2, empate
+        	partidos[indiceArchivo].setResultado(quienGana(equi1,gol1,equi2,gol2));
+
           	indiceArchivo++;
-           /* 
-            System.out.println("Equipo 1 "+ equi1+" goles "+gol1);
-            System.out.println("Equipo 2 "+ equi2+" goles "+gol2);
-            System.out.println("Ronda "+ rond);
-            */
-
-            
-        }
-        
-        
-        
-        
-    	/*
-    	// cuenta las líneas del archivo
-         BufferedReader reader = new BufferedReader(new FileReader("resultados.csv"));
-         while (reader.readLine() != null) {  
-             cuantasLineas++;   //va contando las líneas
-         }
-         //cuantasLineas--;   // sacamos el encabezado
-         reader.close();
-         */
-        
+        	}
+                 
          
-      
-         /*
-         File resultado = new File("resultados.csv");
-         Scanner archivoResultado = new Scanner(resultado);
-      
-        while (archivoResultado.hasNextLine()) {
+        // CONSULTAS SQL
+        //
+        // jugador, idPartido, resultado
+        // SELECT U.nombre, partido.idPartido, P.resultado FROM pronostico AS P INNER JOIN usuario AS U ON P.idUsuario=U.idUsuario INNER JOIN partido as partido ON P.IdPartido=partido.idPartido;
+        //
+        // cuántos jugadores hay
+        // SELECT COUNT(DISTINCT idUsuario) AS cantidad FROM pronostico;
+        //
+        // nombres de los jugadores
+        // SELECT DISTINCT usuario.nombre FROM pronostico INNER JOIN usuario ON pronostico.idUsuario=usuario.idUsuario;
+        //
+        // cuántos pronósticos hay
+        // SELECT COUNT(*) AS cantidad FROM pronostico
+        //
+        // jugador, resultado pronosticado, idPartido
+        // SELECT usuario.nombre, partido.idPartido, pronostico.resultado FROM pronostico INNER JOIN partido ON pronostico.IdPartido=partido.idPartido INNER JOIN usuario ON pronostico.idUsuario=usuario.idUsuario
         
-        	String archivoPartidos = archivoResultado.nextLine();
-  
-        	String[] subcadenas = archivoPartidos.split(","); // separa según las comas
-        	
-        	
-        	partidos[indiceArchivo].setPartidoID(subcadenas[0].trim()); // .trim() elimina espacios en blanco
-        	equipo1 = subcadenas[1].trim();
-        	goles1 = Integer.parseInt(subcadenas[2].trim());
-        	goles2 = Integer.parseInt(subcadenas[3].trim());
-        	equipo2 = subcadenas[4].trim();
-        	ronda= Integer.parseInt(subcadenas[5].trim());
-        	       	
-        	partidos[indiceArchivo].setRonda(ronda);
-        	partidos[indiceArchivo].setEquipo1(equipo1);
-        	partidos[indiceArchivo].setGoles1(goles1);
-        	partidos[indiceArchivo].setEquipo2(equipo2);
-        	partidos[indiceArchivo].setGoles2(goles2);
+        int cantidadJugadores=0;
         
-        	indiceArchivo++;
-          
-        }
-      
-        archivoResultado.close();
-         */
-         
-         
-    	// variables para obtener los datos
-    	boolean gana1=false;
-    	boolean empata=false;
-    	boolean gana2=false;
-   	
-    	//recorremos el archivo de pronósticos para saber cuántos hay
-    	//a lo sumo, si todos fueran de distintas personas, sabemos ya cuántas personas hay como máximo
-    	
-    	cuantasLineas = 0;
-        BufferedReader reader2 = new BufferedReader(new FileReader("pronostico.csv"));
-        while (reader2.readLine() != null) {   //va contando las líneas
-             cuantasLineas++;
+        consultaSQL="SELECT COUNT(DISTINCT idUsuario) AS cantidad FROM pronostico"; // cuantos jugadores hay
+        resultSet = statement.executeQuery(consultaSQL); // ejecuta la consulta
+              
+        while (resultSet.next()) {
+        	cantidadJugadores=resultSet.getInt("cantidad");
 
         }
-        //cuantasLineas--;   // sacamos el encabezado
-        reader2.close();
-    	
-        //creamos arreglo de jugadores
-        String jugadores[] = new String [cuantasLineas];
         
-        //creamos arreglo de puntajes
-        int puntajes[] = new int [cuantasLineas];
+    	    	    	
+        //crea arreglo de jugadores
+        String jugadores[] = new String [cantidadJugadores];
         
-        //creamos arreglo de cantidad de aciertos
-        int aciertos[] = new int [cuantasLineas];
+        //crea arreglo de puntajes
+        int puntajes[] = new int [cantidadJugadores];
+        
+        //crea arreglo de cantidad de aciertos
+        int aciertos[] = new int [cantidadJugadores];
         
         //en jugadores[x] tenemos el nombre del jugador, en puntajes[x] tenemos el puntaje de ese jugador y en aciertos[x] la cantidad de pronósticos acertados
         
         
-      BufferedReader readerPronostico = new BufferedReader(new FileReader("pronostico.csv"));
-           
-      String partidoId2;
+      String nombreJugador;
+      int indiceJugadores = 0;
+      int cantidadPronosticos=0;
+      int indicePronosticos=0;
+  
       
-      int cantidadMaxJugadores=0;
-      int cantidadJugadores=0;
-      String pronostico;
+      // arma arreglo de jugadores
+      consultaSQL="SELECT DISTINCT usuario.nombre FROM pronostico INNER JOIN usuario ON pronostico.idUsuario=usuario.idUsuario"; // nombre de los jugadores
+      resultSet = statement.executeQuery(consultaSQL); // ejecuta la consulta
       
-      //cuantos pronósticos tiene el archivo de acá sacamos la cantidad máxima de jugadores
-      while((pronostico=readerPronostico.readLine()) != null) {
-    	  cantidadMaxJugadores++;
+      while (resultSet.next()) {
+      	nombreJugador=resultSet.getString("nombre");
+      	jugadores[indiceJugadores]=nombreJugador;   // nombre
+      	puntajes[indiceJugadores]=0;  // puntaje
+      	aciertos[indiceJugadores]=0;  // cantidad de aciertos
+      	indiceJugadores++;
       }
       
-      readerPronostico.close();
+      // cantidad de pronósticos
+      consultaSQL="SELECT COUNT(*) AS cantidad FROM pronostico";  // cuenta cantidad de pronósticos
+      resultSet = statement.executeQuery(consultaSQL); // ejecuta la consulta
+      while (resultSet.next()) {
+        	cantidadPronosticos=resultSet.getInt("cantidad");
+        }
+      System.out.println("Cantidad de pronósticos "+cantidadPronosticos);
       
-      BufferedReader readerPronostico2 = new BufferedReader(new FileReader("pronostico.csv"));
       
-      //armar arreglo de nombres de los jugadores
-
-       while ((pronostico = readerPronostico2.readLine()) != null) { 	  
-
-    	String[] subcadenas = pronostico.split(";"); // separa según los punto y comas
-
-    	if (subcadenas.length!=1) {
-
-    	jugador = subcadenas[6].trim(); // nombre del jugador
-    	
-    	if (buscarJugador(jugadores, jugador)==-1) {   // no encontrado
- 
-    		jugadores[cantidadJugadores]=jugador;// agrego el jugador al arreglo
-    		puntajes[cantidadJugadores]=0;  // pongo en 0 el puntaje del jugador
-
-    		cantidadJugadores++;  // voy a tener en definitiva la cantidad de jugadores
-    							// NO OLVIDAR QUE ES CANTIDAD TOTAL hay que usar -1 para acceder a cada jugador
-    	}
-    	}
-    	
-      }
-    	
-      readerPronostico2.close();
-   
+      Pronostico pronosticoJugador[] = new Pronostico [cantidadPronosticos];
       
-      BufferedReader readerPronostico3 = new BufferedReader(new FileReader("pronostico.csv"));
-          
-      while ((pronostico = readerPronostico3.readLine()) != null) {
-                
-        String[] subcadenas = pronostico.split(";"); // separa según los punto y comas al cambiar por comas no funciona ¯\_(ツ)_/¯
-        
-        if (subcadenas.length!=1) {
-        partidoId2 = subcadenas[0].trim(); // .trim() elimina espacios en blanco
-        equipo1 = subcadenas[1].trim();
-        
-        if (subcadenas[2].trim().equals("X")){
-        	gana1=true;
-        }
-        if (subcadenas[3].trim().equals("X")) {
-        	empata=true;
-        }
-        if (subcadenas[4].trim().equals("X")) {
-        	gana2=true;
-        }
-        
-        equipo2 = subcadenas[5].trim();
-        
-        jugador = subcadenas[6].trim();
-        
-        
-        int indiceJugador=-1;
-        
-        int indicePartido=-1;
-
-        indicePartido=buscarIndicePartido(partidos,partidoId2);
-        
-        if (indicePartido!=-1) {
+      // inicializar el arreglo
+      for (int i=0;i<pronosticoJugador.length;i++) {
+        	 pronosticoJugador[i]=new Pronostico("","","");    // inicializa los pronósticos: partido, resultado, jugador
+         }
+      
+      
+      consultaSQL="SELECT usuario.nombre, pronostico.idPartido, pronostico.resultado FROM pronostico INNER JOIN usuario ON pronostico.idUsuario=usuario.idUsuario"; // jugador, resultado pronosticado, idPartido
+      resultSet = statement.executeQuery(consultaSQL); // ejecuta la consulta
+      
+      while (resultSet.next()) {
+    	    pronosticoJugador[indicePronosticos].setJugador(resultSet.getString("nombre"));
+        	pronosticoJugador[indicePronosticos].setPartido(resultSet.getString("idPartido"));
+        	pronosticoJugador[indicePronosticos].setResultado(resultSet.getString("resultado"));
         	
-        	// resutltadoPartido es gana1, gana2 o empate
-        	String resultadoPartido = quienGana(partidos[indicePartido].getEquipo1(),partidos[indicePartido].getGoles1(),partidos[indicePartido].getEquipo2(),partidos[indicePartido].getGoles2());
-        	
-        	if ((empata && resultadoPartido=="empate") || (gana1 && resultadoPartido=="equipo1") || (gana2 && resultadoPartido.equals("equipo2") )) {
-        		indiceJugador=buscarJugador(jugadores, jugador);  // indiceJugador el índice donde está el jugador del pronóstico actual
-        		if (indiceJugador!=-1) {
-        			// encontró el jugador
-        			puntajes[indiceJugador]=puntajes[indiceJugador]+puntosGanador;  // suma los puntos por haber acertado
-        			aciertos[indiceJugador]++;  // suma un acierto más
-        		} // si no encontró el jugador es un pronóstico no válido (no se sabe qué jugador lo hizo) entonces no se hace nada
-        		
-        	}
-        	
+        	indicePronosticos++;
         }
-       
-       //volver las variables a valor inicial
-       gana1=false;
-       gana2=false;
-       empata=false;
+      
+      // donde está la información en este momento
+      // pronosticoJugador[] -> nombre jugador, idPartido, resultado pronosticado
+      // partidos[] -> partidoId, resultado real
      
-        } 
-      }
-      readerPronostico3.close();
-
       
+      for (int i=0;i<indicePronosticos;i++) {   // recorre los pronósticos
+    	  int iJugador=buscarJugador(jugadores,pronosticoJugador[i].getJugador());  // busca el indice del arreglo de jugador
+    	  if (iJugador!=-1) {    // encontró el jugador
+    		  
+    		  int iPartido=buscarIndicePartido(partidos,pronosticoJugador[i].getPartido());  // busca el indice del arreglo de partidos
+ 
+    		  if (iPartido!=-1) {  // encontró el partido
+ 
+    			  if (pronosticoJugador[i].getResultado().equals(partidos[iPartido].getResultado())) {   // el resultado real es igual al pronosticado
+        			  
+        			puntajes[iJugador]=puntajes[iJugador]+puntosGanador;  // suma los puntos segun el archivo de configuración inicial
+        			aciertos[iJugador]++;  // suma 1 a cantidad de aciertos
+        		  }  
+    			  
+    		  } else {
+        		  System.out.println("No se encuentra el partido");
+        	  }
+   		  
+    	  } else {
+    		  System.out.println("No se encuentra el jugador");
+    	  }
+    	  
+    	  
+      }
+      
+       
       //muestra el puntaje
 
       for (int i=0; i < cantidadJugadores; i++) {
     	  System.out.println("El puntaje del jugador "+jugadores[i]+" es "+puntajes[i]+" y acertó "+aciertos[i]+" resultados." ); 
       }
          
+      conexion.close();  // cierra la conexión
       
     } catch (FileNotFoundException e) {     // error en el manejo de los archivos
       System.out.println("A ocurrido un error.");
