@@ -3,16 +3,13 @@
 public class Partido {
 	
 	private int partidoID;
-	//private Equipo equipo1;
 	private String equipo1;
-	//private Equipo equipo2;
 	private String equipo2;
 	private int goles1;
 	private int goles2;
 	private int ronda;
 	private String resultado; 
 	
-	//public Partido(Equipo equi1, int gol1, Equipo equi2, int gol2) {
 	public Partido(int partId, String equi1, int gol1, String equi2, int gol2, int rond) {
 		
 		this.ronda=rond;

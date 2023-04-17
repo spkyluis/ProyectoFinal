@@ -1,3 +1,32 @@
+// *************************************************************************************
+// *                                                                                   *
+// *  Se asume de antemano que cada ronda son 4 partidos y cada fase son 4 rondas      *
+// *                                                                                   *
+// ************************************************************************************* 
+
+      
+        // CONSULTAS SQL UTILIZADAS
+        //
+        // jugador, idPartido, resultado
+        // SELECT U.nombre, partido.idPartido, P.resultado FROM pronostico AS P INNER JOIN usuario AS U ON P.idUsuario=U.idUsuario INNER JOIN partido as partido ON P.IdPartido=partido.idPartido;
+        //
+        // cuántos jugadores hay
+        // SELECT COUNT(DISTINCT idUsuario) AS cantidad FROM pronostico;
+        //
+        // nombres de los jugadores
+        // SELECT DISTINCT usuario.nombre FROM pronostico INNER JOIN usuario ON pronostico.idUsuario=usuario.idUsuario;
+        //
+        // cuántos pronósticos hay
+        // SELECT COUNT(*) AS cantidad FROM pronostico
+        //
+        // jugador, resultado pronosticado, idPartido
+        // SELECT usuario.nombre, partido.idPartido, pronostico.resultado FROM pronostico INNER JOIN partido ON pronostico.IdPartido=partido.idPartido INNER JOIN usuario ON pronostico.idUsuario=usuario.idUsuario
+        //
+        // información de las rondas
+        // SELECT * FROM ronda
+        //
+        // a qué ronda pertenece un partido
+        // SELECT ronda.idRonda FROM ronda WHERE ronda.partido1=7 OR ronda.partido2=7 OR ronda.partido3=7 OR ronda.partido4=7;
 
 import java.io.File;  
 import java.io.FileNotFoundException; 
@@ -53,22 +82,18 @@ public class usoPartido {
 			}
 		} 
 		
-		
 	}
+	
+	
 	
 	
   public static void main(String[] args) throws IOException, SQLException {
     try {
-    	// variables para obtener los datos
-
     
     	int cuantasLineas = 0;
     	int indiceArchivo=0;
     	 
-    	int puntaje=0; 
-    	
-    	String jugador;
-    	
+   	
     	// variables de configuración
     	int puntosGanador=0;
     	int puntosExtraRonda=0;
@@ -92,24 +117,26 @@ public class usoPartido {
         
         readerconfig.close();
     	
-    	
+        // variables de configuración globales 
+        int cantidadPartidosPorRonda=4;
+    	int cantidadRondasPorFase=4;
         
-        // Establece datos de la base de datos, el usuario y la contraseña
+        // establece datos de la base de datos, el usuario y la contraseña
         String usuario = "root";
         String contrasena = "";
         String consultaSQL = "";
         int cantidadRegistros=0;
 
-        // Establece la conexión a la base de datos
+        // establece la conexión a la base de datos
         Connection conexion = DriverManager.getConnection(baseDatos, usuario, contrasena);
+        
+        // crea un objeto Statement
+        Statement statement = conexion.createStatement();
         
         // busca todos los partidos
         consultaSQL="SELECT * FROM partido";
         
-        // Crea un objeto Statement
-        Statement statement = conexion.createStatement();
-
-        // Ejecuta la consulta y obtiene un ResultSet con los datos buscados
+        // ejecuta la consulta y obtiene un ResultSet con los datos buscados
         ResultSet resultSet = statement.executeQuery(consultaSQL);
         
         // recorre el resultset para saber cuántos registros hay
@@ -153,24 +180,6 @@ public class usoPartido {
           	indiceArchivo++;
         	}
                  
-         
-        // CONSULTAS SQL
-        //
-        // jugador, idPartido, resultado
-        // SELECT U.nombre, partido.idPartido, P.resultado FROM pronostico AS P INNER JOIN usuario AS U ON P.idUsuario=U.idUsuario INNER JOIN partido as partido ON P.IdPartido=partido.idPartido;
-        //
-        // cuántos jugadores hay
-        // SELECT COUNT(DISTINCT idUsuario) AS cantidad FROM pronostico;
-        //
-        // nombres de los jugadores
-        // SELECT DISTINCT usuario.nombre FROM pronostico INNER JOIN usuario ON pronostico.idUsuario=usuario.idUsuario;
-        //
-        // cuántos pronósticos hay
-        // SELECT COUNT(*) AS cantidad FROM pronostico
-        //
-        // jugador, resultado pronosticado, idPartido
-        // SELECT usuario.nombre, partido.idPartido, pronostico.resultado FROM pronostico INNER JOIN partido ON pronostico.IdPartido=partido.idPartido INNER JOIN usuario ON pronostico.idUsuario=usuario.idUsuario
-        
         int cantidadJugadores=0;
         
         consultaSQL="SELECT COUNT(DISTINCT idUsuario) AS cantidad FROM pronostico"; // cuantos jugadores hay
@@ -180,25 +189,75 @@ public class usoPartido {
         	cantidadJugadores=resultSet.getInt("cantidad");
 
         }
+    	
+        System.out.println("Cantidad de jugadores "+cantidadJugadores);
         
-    	    	    	
-        //crea arreglo de jugadores
+        // crea arreglo de jugadores
         String jugadores[] = new String [cantidadJugadores];
         
-        //crea arreglo de puntajes
+        // crea arreglo de puntajes
         int puntajes[] = new int [cantidadJugadores];
         
-        //crea arreglo de cantidad de aciertos
+        // crea arreglo de cantidad de aciertos
         int aciertos[] = new int [cantidadJugadores];
+        
         
         //en jugadores[x] tenemos el nombre del jugador, en puntajes[x] tenemos el puntaje de ese jugador y en aciertos[x] la cantidad de pronósticos acertados
         
+       
+        int cantidadRondas=0;        
+       
+        consultaSQL="SELECT COUNT(*) AS cantidad FROM ronda";    // cuántas rondas hay
+        resultSet = statement.executeQuery(consultaSQL); // ejecuta la consulta
         
+        while (resultSet.next()) {
+        	cantidadRondas=resultSet.getInt("cantidad");
+
+        }
+        
+        // crea arreglo de rondas
+        Ronda [] rondas = new Ronda[cantidadRondas]; 
+        
+        for (int i=0;i<rondas.length;i++) {
+          	 rondas[i]=new Ronda("","","","","");    //inicializa las rondas
+           }
+        
+       
+        // crea arreglo para controlar los aciertos por ronda de cada jugador
+        // en rondasJugador[que jugador][que ronda] tenemos los aciertos de esa ronda para ese jugador
+        int [][] rondasJugador = new int [cantidadJugadores][cantidadRondas];
+        
+        // inicializa 
+        for (int i = 0; i < cantidadJugadores; i++) {
+            for (int j = 0; j < cantidadRondas; j++) {
+                rondasJugador[i][j] = 0;
+            }
+        }
+        
+        
+        int indiceRonda=0;
+                
+        consultaSQL="SELECT * FROM ronda"; // trae la información de las rondas
+        resultSet = statement.executeQuery(consultaSQL); // ejecuta la consulta
+        
+        while (resultSet.next()) {
+        	
+        	rondas[indiceRonda].setIdRonda(resultSet.getString("idRonda"));
+        	rondas[indiceRonda].setPartido1(resultSet.getString("partido1"));
+        	rondas[indiceRonda].setPartido2(resultSet.getString("partido2"));
+        	rondas[indiceRonda].setPartido3(resultSet.getString("partido3"));
+        	rondas[indiceRonda].setPartido4(resultSet.getString("partido4"));
+        	
+        	indiceRonda++;
+
+        }
+        
+       
       String nombreJugador;
       int indiceJugadores = 0;
       int cantidadPronosticos=0;
       int indicePronosticos=0;
-  
+      int ronda=0;
       
       // arma arreglo de jugadores
       consultaSQL="SELECT DISTINCT usuario.nombre FROM pronostico INNER JOIN usuario ON pronostico.idUsuario=usuario.idUsuario"; // nombre de los jugadores
@@ -228,7 +287,6 @@ public class usoPartido {
         	 pronosticoJugador[i]=new Pronostico("","","");    // inicializa los pronósticos: partido, resultado, jugador
          }
       
-      
       consultaSQL="SELECT usuario.nombre, pronostico.idPartido, pronostico.resultado FROM pronostico INNER JOIN usuario ON pronostico.idUsuario=usuario.idUsuario"; // jugador, resultado pronosticado, idPartido
       resultSet = statement.executeQuery(consultaSQL); // ejecuta la consulta
       
@@ -240,9 +298,13 @@ public class usoPartido {
         	indicePronosticos++;
         }
       
+      // **************************************************************************
       // donde está la información en este momento
       // pronosticoJugador[] -> nombre jugador, idPartido, resultado pronosticado
       // partidos[] -> partidoId, resultado real
+      // rondas[] -> qué partidos pertenecen a cada ronda
+      // rondasJugador[][] -> qué partidos acertó el jugador de cada ronda 
+      // **************************************************************************
      
       
       for (int i=0;i<indicePronosticos;i++) {   // recorre los pronósticos
@@ -253,10 +315,20 @@ public class usoPartido {
  
     		  if (iPartido!=-1) {  // encontró el partido
  
+    			  // de qué ronda es el partido?
+    			  // busca la ronda de un partidoId específico
+    			  consultaSQL="SELECT ronda.idRonda FROM ronda WHERE ronda.partido1="+pronosticoJugador[i].getPartido() +" OR ronda.partido2="+pronosticoJugador[i].getPartido() +" OR ronda.partido3="+pronosticoJugador[i].getPartido() +" OR ronda.partido4="+pronosticoJugador[i].getPartido();
+    			  resultSet = statement.executeQuery(consultaSQL); // ejecuta la consulta
+    			  while (resultSet.next()) {
+    		    	  ronda=resultSet.getInt("idRonda");  
+    				  
+    		        }  
+    			  
     			  if (pronosticoJugador[i].getResultado().equals(partidos[iPartido].getResultado())) {   // el resultado real es igual al pronosticado
         			  
         			puntajes[iJugador]=puntajes[iJugador]+puntosGanador;  // suma los puntos segun el archivo de configuración inicial
-        			aciertos[iJugador]++;  // suma 1 a cantidad de aciertos
+        			aciertos[iJugador]++;  // suma 1 a la cantidad de aciertos totales
+        			rondasJugador[iJugador][ronda]++;  // suma 1 a la cantidad de aciertos de la ronda
         		  }  
     			  
     		  } else {
@@ -272,9 +344,26 @@ public class usoPartido {
       
        
       //muestra el puntaje
+      
+      boolean sumaPuntosPorRonda=false;  // para saber si sumó puntos extras por acertar todos los partidos de la ronda
 
-      for (int i=0; i < cantidadJugadores; i++) {
-    	  System.out.println("El puntaje del jugador "+jugadores[i]+" es "+puntajes[i]+" y acertó "+aciertos[i]+" resultados." ); 
+      for (int i=0; i < cantidadJugadores; i++) {  
+    	   
+    	  for (int j=1; j<cantidadRondas;j++) { 
+    		  
+    		  if (rondasJugador[i][j]==cantidadPartidosPorRonda) {    // si la cantidad de aciertos por ronda es igual al nro de partidos por ronda, suma puntos extra
+    			  puntajes[i]=puntajes[i]+puntosExtraRonda;
+    			  sumaPuntosPorRonda=true;  // suma puntos extra
+    		  }
+    		  
+    	  }
+    	  
+    	  if (sumaPuntosPorRonda) {
+    		  System.out.println("El puntaje del jugador "+jugadores[i]+" es "+puntajes[i]+", acertó "+aciertos[i]+" resultados y sumó puntos extras." );
+    	  } else {
+    		  System.out.println("El puntaje del jugador "+jugadores[i]+" es "+puntajes[i]+" y acertó "+aciertos[i]+" resultados." );  
+    	  }
+    	  
       }
          
       conexion.close();  // cierra la conexión
@@ -290,4 +379,3 @@ public class usoPartido {
     
   }
 }
-
