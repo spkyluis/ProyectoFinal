@@ -85,8 +85,6 @@ public class usoPartido {
 	}
 	
 	
-	
-	
   public static void main(String[] args) throws IOException, SQLException {
     try {
     
@@ -234,9 +232,23 @@ public class usoPartido {
             }
         }
         
-        
         int indiceRonda=0;
-                
+        
+        /*
+        // crea arreglo para controlar los aciertos por fase de cada jugador
+        // en fasesJugador[que jugador][que ronda] tenemos los aciertos de esa ronda para ese jugador
+        int [][] fasesJugador = new int [cantidadJugadores][cantidadFases];   **** falta contar las fases
+        
+        // inicializa 
+        for (int i = 0; i < cantidadJugadores; i++) {
+            for (int j = 0; j < cantidadFases; j++) {
+                rondasJugador[i][j] = 0;
+            }
+        }
+         */
+        
+        
+        
         consultaSQL="SELECT * FROM ronda"; // trae la información de las rondas
         resultSet = statement.executeQuery(consultaSQL); // ejecuta la consulta
         
@@ -251,13 +263,13 @@ public class usoPartido {
         	indiceRonda++;
 
         }
-        
        
       String nombreJugador;
       int indiceJugadores = 0;
       int cantidadPronosticos=0;
       int indicePronosticos=0;
       int ronda=0;
+      // int fase=0;
       
       // arma arreglo de jugadores
       consultaSQL="SELECT DISTINCT usuario.nombre FROM pronostico INNER JOIN usuario ON pronostico.idUsuario=usuario.idUsuario"; // nombre de los jugadores
@@ -329,6 +341,19 @@ public class usoPartido {
         			puntajes[iJugador]=puntajes[iJugador]+puntosGanador;  // suma los puntos segun el archivo de configuración inicial
         			aciertos[iJugador]++;  // suma 1 a la cantidad de aciertos totales
         			rondasJugador[iJugador][ronda]++;  // suma 1 a la cantidad de aciertos de la ronda
+        			
+        			// si suma 4 (cantidadPartidosPorRonda) aciertos en la ronda -> toda la ronda acertada
+        			// if (rondasJugador[iJugador][ronda]==cantidadPartidosPorRonda) {  
+        			//		// busca la fase de una ronda específica
+        			// 		consultaSQL="SELECT fase.idFase FROM fase WHERE fase.ronda1="+ronda +" OR fase.ronda2="+ronda +" OR fase.ronda3="+ronda +" OR fase.ronda4="+ronda;
+        			// 		resultSet = statement.executeQuery(consultaSQL); // ejecuta la consulta
+      			  	//		while (resultSet.next()) {
+      		    	// 			fase=resultSet.getInt("idFase");  
+      				//      }  
+        			//		
+        			//		fasesJugador[iJugador][fase]++; // suma una ronda completa acertada a la fase
+        			//}
+        			
         		  }  
     			  
     		  } else {
@@ -339,13 +364,12 @@ public class usoPartido {
     		  System.out.println("No se encuentra el jugador");
     	  }
     	  
-    	  
       }
       
-       
-      //muestra el puntaje
+       //muestra el puntaje
       
       boolean sumaPuntosPorRonda=false;  // para saber si sumó puntos extras por acertar todos los partidos de la ronda
+      //  boolean sumaPuntosPorFase=false;  // para saber si sumó puntos extra por acertar una fase completa
 
       for (int i=0; i < cantidadJugadores; i++) {  
     	   
@@ -354,12 +378,28 @@ public class usoPartido {
     		  if (rondasJugador[i][j]==cantidadPartidosPorRonda) {    // si la cantidad de aciertos por ronda es igual al nro de partidos por ronda, suma puntos extra
     			  puntajes[i]=puntajes[i]+puntosExtraRonda;
     			  sumaPuntosPorRonda=true;  // suma puntos extra
+    			  
+    			  /*
+    			   if (fasesJugador[i][j]==cantidadRondasPorFase) {   // si la cantidad de aciertos por fase es igual a la cantidad de rondas por fse, acertó todo y suma puntos extra
+    			   		puntajes[i]=puntjaes[i]+puntosExtraFase;
+    			   		sumaPuntosPorFase=true;
+    			   		}
+    			  */
+    			  
+    			  
     		  }
     		  
     	  }
     	  
-    	  if (sumaPuntosPorRonda) {
-    		  System.out.println("El puntaje del jugador "+jugadores[i]+" es "+puntajes[i]+", acertó "+aciertos[i]+" resultados y sumó puntos extras." );
+    	  // si suma puntos por fase (obviamente sumó por ronda también) se muestra mensaje que sumó extra por ronda y por fase
+    	  //	System.out.println("El puntaje del jugador "+jugadores[i]+" es "+puntajes[i]+", acertó "+aciertos[i]+" resultados y sumó puntos extras por haber acertado al menos una fase completa");
+    	  //  si no, si suma puntos por ronda muestra mensje que sumó extra por ronda
+    	  //		System.out.println(("El puntaje del jugador "+jugadores[i]+" es "+puntajes[i]+", acertó "+aciertos[i]+" resultados y sumó puntos extras por haber acertado al menos una ronda completa");
+    	  //   si no, se muestra mensaje sumó tantos puntos
+    	  //			System.out.println("El puntaje del jugador "+jugadores[i]+" es "+puntajes[i]+" y acertó "+aciertos[i]+" resultados." );
+    	  
+    	  if (sumaPuntosPorRonda) {   //  
+    		  System.out.println("El puntaje del jugador "+jugadores[i]+" es "+puntajes[i]+", acertó "+aciertos[i]+" resultados y sumó puntos extras." ); // + 
     	  } else {
     		  System.out.println("El puntaje del jugador "+jugadores[i]+" es "+puntajes[i]+" y acertó "+aciertos[i]+" resultados." );  
     	  }
